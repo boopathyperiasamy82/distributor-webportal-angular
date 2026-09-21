@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface MenuItem {
   menuCode: string;
@@ -10,6 +11,50 @@ export interface MenuItem {
   icon: string;
   children: MenuItem[];
 }
+
+const FALLBACK_MENU_ITEMS: MenuItem[] = [
+  { menuCode: 'MASTER', menuDescription: 'Master', parentCode: '', access: 'Y', icon: 'layers', children: [] },
+  { menuCode: 'MASTER_PRODUCT', menuDescription: 'Product', parentCode: 'MASTER', access: 'Y', icon: 'package', children: [] },
+  { menuCode: 'MASTER_SALESMAN', menuDescription: 'Salesman', parentCode: 'MASTER', access: 'Y', icon: 'user-check', children: [] },
+  { menuCode: 'MASTER_ROUTE', menuDescription: 'Route', parentCode: 'MASTER', access: 'Y', icon: 'map-pin', children: [] },
+  { menuCode: 'MASTER_CUSTOMER', menuDescription: 'Customer', parentCode: 'MASTER', access: 'Y', icon: 'users', children: [] },
+  { menuCode: 'MASTER_SALES_HIERARCHY', menuDescription: 'Sales Hierarchy', parentCode: 'MASTER', access: 'Y', icon: 'network', children: [] },
+  { menuCode: 'MASTER_GEO_HIERARCHY', menuDescription: 'Geo Hierarchy', parentCode: 'MASTER', access: 'Y', icon: 'globe', children: [] },
+  { menuCode: 'MASTER_DISTRIBUTOR_GEO_MAPPING', menuDescription: 'Distributor Sales and Geo Mapping', parentCode: 'MASTER', access: 'Y', icon: 'map-pin', children: [] },
+  
+  { menuCode: 'TRANSACTION', menuDescription: 'Transaction', parentCode: '', access: 'Y', icon: 'arrow-left-right', children: [] },
+  { menuCode: 'TXN_ORDER_BOOKING', menuDescription: 'Order Booking', parentCode: 'TRANSACTION', access: 'Y', icon: 'clipboard-list', children: [] },
+  { menuCode: 'TXN_SALES_RETURN', menuDescription: 'Sales Return', parentCode: 'TRANSACTION', access: 'Y', icon: 'rotate-ccw', children: [] },
+  { menuCode: 'TXN_COLLECTION', menuDescription: 'Collection', parentCode: 'TRANSACTION', access: 'Y', icon: 'banknote', children: [] },
+  
+  { menuCode: 'INVENTORY', menuDescription: 'Inventory', parentCode: '', access: 'Y', icon: 'archive', children: [] },
+  { menuCode: 'INV_PURCHASE', menuDescription: 'Purchase', parentCode: 'INVENTORY', access: 'Y', icon: 'shopping-cart', children: [] },
+  { menuCode: 'INV_ORDER_TO_SALES', menuDescription: 'Order to Sales', parentCode: 'INVENTORY', access: 'Y', icon: 'truck', children: [] },
+  { menuCode: 'INV_STOCK_ADJUSTMENT', menuDescription: 'Stock Adjustment', parentCode: 'INVENTORY', access: 'Y', icon: 'sliders', children: [] },
+  
+  { menuCode: 'REPORT_DISTRIBUTOR', menuDescription: 'Distributor Reports & Analytics', parentCode: '', access: 'Y', icon: 'building', children: [] },
+  { menuCode: 'RPT_DAILY_STOCK', menuDescription: 'Daily Stock Report', parentCode: 'REPORT_DISTRIBUTOR', access: 'Y', icon: 'file-bar-chart', children: [] },
+  { menuCode: 'RPT_STOCK_LEDGER', menuDescription: 'Stock Ledger Report', parentCode: 'REPORT_DISTRIBUTOR', access: 'Y', icon: 'book-open', children: [] },
+  { menuCode: 'RPT_INVENTORY_SUMMARY', menuDescription: 'Inventory Summary Report', parentCode: 'REPORT_DISTRIBUTOR', access: 'Y', icon: 'pie-chart', children: [] },
+  { menuCode: 'RPT_EXECUTIVE_ANALYTICS', menuDescription: 'Executive Analytics Dashboard', parentCode: 'REPORT_DISTRIBUTOR', access: 'Y', icon: 'trending-up', children: [] },
+  { menuCode: 'SLS_DISTRIBUTOR_GROWTH_HUB', menuDescription: 'Distributor Business Growth & ROI Hub', parentCode: 'REPORT_DISTRIBUTOR', access: 'Y', icon: 'zap', children: [] },
+  { menuCode: 'RPT_DISTRIBUTOR_BANK_AUTO_PO', menuDescription: 'Bank OD Interest & AI Auto-PO Optimizer', parentCode: 'REPORT_DISTRIBUTOR', access: 'Y', icon: 'shield-check', children: [] },
+  
+  { menuCode: 'REPORT_CUSTOMER', menuDescription: 'Customer (Retailer) Reports', parentCode: '', access: 'Y', icon: 'users', children: [] },
+  { menuCode: 'SLS_STRATEGY_CUSTOMER_360', menuDescription: 'Sales Strategy & Customer 360° Report', parentCode: 'REPORT_CUSTOMER', access: 'Y', icon: 'target', children: [] },
+  { menuCode: 'RPT_CUSTOMER_CREDIT_HEALTH', menuDescription: 'Retailer Credit Health & BNPL Limit Engine', parentCode: 'REPORT_CUSTOMER', access: 'Y', icon: 'credit-card', children: [] },
+  
+  { menuCode: 'REPORT_SALESMAN', menuDescription: 'Salesman Reports & Gamification', parentCode: '', access: 'Y', icon: 'award', children: [] },
+  { menuCode: 'SLS_INCENTIVE_GAMIFICATION', menuDescription: 'Salesman MTD Incentives & 3D Gamification', parentCode: 'REPORT_SALESMAN', access: 'Y', icon: 'trophy', children: [] },
+  { menuCode: 'RPT_SALESMAN_NEXT_TIER_BEAT', menuDescription: 'Salesman Live Target Bonus & Beat Route GPS', parentCode: 'REPORT_SALESMAN', access: 'Y', icon: 'map-pin', children: [] },
+  
+  { menuCode: 'PLUG', menuDescription: 'Plug', parentCode: '', access: 'Y', icon: 'plug', children: [] },
+  { menuCode: 'PLUG_EXPORT', menuDescription: 'Export', parentCode: 'PLUG', access: 'Y', icon: 'download', children: [] },
+  { menuCode: 'PLUG_IMPORT', menuDescription: 'Import', parentCode: 'PLUG', access: 'Y', icon: 'upload', children: [] },
+  
+  { menuCode: 'CONFIGURATION', menuDescription: 'Configuration', parentCode: '', access: 'Y', icon: 'settings', children: [] },
+  { menuCode: 'CONFIG_USER_PRIVILEGES', menuDescription: 'User Privileges', parentCode: 'CONFIGURATION', access: 'Y', icon: 'shield-alert', children: [] }
+];
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +96,7 @@ export class MenuService {
   }
 
   loadMenus(): Observable<MenuItem[]> {
-    return this.http.get('/assets/menus.xml', { responseType: 'text' }).pipe(
+    return this.http.get('assets/menus.xml', { responseType: 'text' }).pipe(
       map(xmlString => {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
@@ -69,8 +114,9 @@ export class MenuService {
             children: []
           });
         }
-        return items;
-      })
+        return items.length > 0 ? items : FALLBACK_MENU_ITEMS;
+      }),
+      catchError(() => of(FALLBACK_MENU_ITEMS))
     );
   }
 
@@ -78,10 +124,7 @@ export class MenuService {
     const itemMap = new Map<string, MenuItem>();
     const roots: MenuItem[] = [];
     
-    // Create a map of all items that are accessible
     items.forEach(item => {
-      // Allow access if allowedCodes has '*', or if user has access to this menu code, 
-      // or if it's a parent menu (which we'll filter out later if it has no children)
       if (allowedCodes.has('*') || allowedCodes.has(item.menuCode) || !item.parentCode) {
          itemMap.set(item.menuCode, { ...item, children: [] });
       }
@@ -98,7 +141,6 @@ export class MenuService {
       }
     });
 
-    // Filter out empty roots for users who don't have access to '*'
     if (!allowedCodes.has('*')) {
        return roots.filter(root => root.children.length > 0);
     }
