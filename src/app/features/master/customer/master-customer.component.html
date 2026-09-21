@@ -1,0 +1,62 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Customer Master</h2>
+      <p class="page-sub">Manage customer directory</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search customer..." class="search-input">
+      </div>
+      <span class="count-badge">{{ filteredCustomers().length }} records</span>
+      <button class="btn-icon-circle" (click)="loadCustomers()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading customers...</span>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Customer Code</th>
+            <th>Customer Name</th>
+            <th>Contact Person</th>
+            <th>Phone</th>
+            <th>City</th>
+            <th class="text-right">Credit Limit (₹)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of filteredCustomers(); track c.CustomerCode || c.customer_code; let i = $index) {
+            <tr>
+              <td class="text-muted">{{ i + 1 }}</td>
+              <td><code class="code-badge">{{ c.CustomerCode || c.customer_code }}</code></td>
+              <td class="prod-name">{{ c.CustomerName || c.customer_name }}</td>
+              <td>{{ c.ContactPerson || c.contact_person || '—' }}</td>
+              <td>{{ c.Phone || c.phone || '—' }}</td>
+              <td>{{ c.City || c.city || '—' }}</td>
+              <td class="text-right font-bold">{{ (c.CreditLimit || c.credit_limit || 0) | number:'1.2-2' }}</td>
+              <td>
+                <span class="status-badge" [class.active]="(c.Status || c.status) === 'ACTIVE'" [class.inactive]="(c.Status || c.status) !== 'ACTIVE'">
+                  {{ c.Status || c.status || 'INACTIVE' }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="empty-state">No customers found.</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

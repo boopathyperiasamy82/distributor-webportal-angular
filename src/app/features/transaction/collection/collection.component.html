@@ -1,0 +1,97 @@
+<div class="collection-container">
+  <div class="header">
+    <h2>Collection</h2>
+    <div class="actions">
+      <div class="total-badge">Total: {{ formatCurrency(totalAmount()) }}</div>
+      <input type="date" [(ngModel)]="selectedDate" (change)="loadCollections()" class="date-input" />
+      <button class="btn btn-primary" (click)="openModal()">Record Collection</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    @for (tab of modeTabs; track tab) {
+      <button [class.active]="currentMode() === tab" (click)="currentMode.set(tab)">{{ tab }}</button>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-spinner">Loading...</div>
+  } @else {
+    @if (collections().length === 0) {
+      <div class="empty-state">No collections found for this date.</div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Receipt No</th>
+            <th>Customer</th>
+            <th>Amount (₹)</th>
+            <th>Mode</th>
+            <th>Reference</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of collections(); track c.receiptNo) {
+            <tr>
+              <td>{{ c.receiptNo }}</td>
+              <td>{{ c.customerName }}</td>
+              <td>{{ c.amount | number:'1.2-2' }}</td>
+              <td><span class="mode-badge" [ngClass]="c.mode?.toLowerCase()">{{ c.mode }}</span></td>
+              <td>{{ c.referenceNo || '-' }}</td>
+              <td>{{ c.remarks || '-' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  }
+
+  @if (showModal()) {
+    <div class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Record Collection</h3>
+          <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Customer</label>
+            <select [(ngModel)]="selectedCustomer">
+              <option value="">-- Select --</option>
+              @for (c of masterCustomers(); track c.CustomerCode) {
+                <option [value]="c.CustomerCode || c.customer_code">{{ c.CustomerName || c.customer_name }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Amount (₹)</label>
+            <input type="number" [(ngModel)]="collAmount" min="0" />
+          </div>
+          <div class="form-group">
+            <label>Payment Mode</label>
+            <select [(ngModel)]="paymentMode">
+              @for (m of paymentModes; track m) {
+                <option [value]="m">{{ m }}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Reference No (Cheque/Txn ID)</label>
+            <input type="text" [(ngModel)]="referenceNo" />
+          </div>
+          <div class="form-group">
+            <label>Remarks</label>
+            <textarea [(ngModel)]="remarks" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+          <button class="btn btn-primary" [disabled]="submitting()" (click)="submitCollection()">
+            {{ submitting() ? 'Saving...' : 'Save Collection' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

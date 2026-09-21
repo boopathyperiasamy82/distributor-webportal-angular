@@ -1,0 +1,64 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Reports Dashboard</h2>
+      <p class="page-sub">Quick overview of key metrics</p>
+    </div>
+    <div class="header-actions">
+      <select [(ngModel)]="period" (change)="loadData()" class="period-select">
+        <option value="TODAY">Today</option>
+        <option value="MTD">Month to Date</option>
+        <option value="YTD">Year to Date</option>
+      </select>
+      <button class="btn-icon-circle" (click)="loadData()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <span>Loading metrics...</span>
+    </div>
+  } @else if (kpiData()) {
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-title">Total SKUs Active</div>
+        <div class="kpi-value">{{ kpiData().totalSkus || 0 }}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Stock Value</div>
+        <div class="kpi-value text-blue">₹{{ (kpiData().totalStockValue || 0) | number:'1.0-0' }}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Sales Value</div>
+        <div class="kpi-value text-green">₹{{ (kpiData().totalSalesValue || 0) | number:'1.0-0' }}</div>
+      </div>
+    </div>
+
+    <div class="table-card mt-4">
+      <h3 class="section-title">Top Moving Products</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Product Name</th>
+            <th class="text-right">Sales Qty</th>
+            <th class="text-right">Revenue (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (p of kpiData().topProducts || []; track p.productCode) {
+            <tr>
+              <td class="prod-name">{{ p.productName }}</td>
+              <td class="text-right font-bold">{{ p.qty }}</td>
+              <td class="text-right text-green">{{ p.revenue | number:'1.0-0' }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="3" class="empty-state">No product movement data</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

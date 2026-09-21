@@ -1,0 +1,55 @@
+<div class="ots-container">
+  <div class="header">
+    <h2>Order to Sale / Dispatch</h2>
+    <p>List of confirmed orders pending for dispatch.</p>
+  </div>
+  
+  @if (loading()) { <div class="loading">Loading...</div> }
+  @else {
+    @if (orders().length === 0) { <div class="empty">No confirmed orders available for dispatch.</div> }
+    @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Order No</th>
+            <th>Date</th>
+            <th>Salesman</th>
+            <th>Customer</th>
+            <th>Total Value (₹)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of orders(); track o.orderNo) {
+            <tr>
+              <td><button class="expand-btn" (click)="toggleExpand(o.orderNo)">{{ isExpanded(o.orderNo) ? '▼' : '▶' }}</button></td>
+              <td>{{ o.orderNo }}</td>
+              <td>{{ o.orderDate }}</td>
+              <td>{{ o.salesman }}</td>
+              <td>{{ o.customerName }}</td>
+              <td>{{ o.totalNet | number:'1.2-2' }}</td>
+              <td><button class="btn btn-primary" (click)="convertToSale(o.orderNo)">Dispatch</button></td>
+            </tr>
+            @if (isExpanded(o.orderNo)) {
+              <tr class="detail-row">
+                <td colspan="7">
+                  <div class="details">
+                    <table>
+                      <thead><tr><th>Product</th><th>Qty</th><th>Rate</th><th>Net</th></tr></thead>
+                      <tbody>
+                        @for (item of o.items || []; track item.lineNo) {
+                          <tr><td>{{ item.prodName }}</td><td>{{ item.qty }} {{ item.uom }}</td><td>{{ item.sellingRate }}</td><td>{{ item.net }}</td></tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    }
+  }
+</div>

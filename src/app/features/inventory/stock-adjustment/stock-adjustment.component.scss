@@ -1,0 +1,11 @@
+.adj-container {
+  padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; h2 { margin: 0; color: #2c3e50; } }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; label { font-weight: 500; color: #444; } input, select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; } }
+  .data-table { width: 100%; border-collapse: collapse; th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; } th { background: #f8f9fa; font-weight: 600; } }
+  .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-weight: 500; &-primary { background: #007bff; color: white; } &-secondary { background: #6c757d; color: white; } &-sm { padding: 0.25rem 0.5rem; font-size: 0.875rem; margin-right: 0.25rem; } &-confirm { background: #28a745; color: white; } &-cancel { background: #dc3545; color: white; } &:disabled { opacity: 0.6; } }
+  .mt-4 { margin-top: 1.5rem; }
+  .status-badge { padding: 0.25rem 0.5rem; border-radius: 12px; font-size: 0.875rem; &.pending { background: #fff3cd; color: #856404; } &.approved { background: #d4edda; color: #155724; } &.rejected { background: #f8d7da; color: #721c24; } }
+  .text-green { color: #28a745; font-weight: bold; } .text-red { color: #dc3545; font-weight: bold; }
+}

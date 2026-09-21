@@ -1,0 +1,57 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Retailer Credit & BNPL</h2>
+      <p class="page-sub">Manage Buy-Now-Pay-Later limits</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon-circle" (click)="loadData()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading credit data...</span>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th class="text-right">Credit Limit (₹)</th>
+            <th class="text-right">Used (₹)</th>
+            <th class="text-right">Available (₹)</th>
+            <th>Utilization</th>
+            <th>BNPL Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (c of creditData(); track c.name) {
+            <tr>
+              <td class="prod-name">{{ c.name }}</td>
+              <td class="text-right font-bold">{{ c.limit | number:'1.0-0' }}</td>
+              <td class="text-right text-red">{{ c.used | number:'1.0-0' }}</td>
+              <td class="text-right text-green">{{ (c.limit - c.used) | number:'1.0-0' }}</td>
+              <td class="util-cell">
+                <div class="util-bar-bg">
+                  <div class="util-bar-fill" [style.width.%]="(c.used / c.limit) * 100"
+                       [class.high]="(c.used / c.limit) > 0.8" [class.med]="(c.used / c.limit) > 0.5 && (c.used / c.limit) <= 0.8"></div>
+                </div>
+                <span class="util-text">{{ ((c.used / c.limit) * 100) | number:'1.0-1' }}%</span>
+              </td>
+              <td>
+                <span class="bnpl-badge" [attr.data-status]="c.bnpl.toLowerCase()">{{ c.bnpl }}</span>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty-state">No credit data</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

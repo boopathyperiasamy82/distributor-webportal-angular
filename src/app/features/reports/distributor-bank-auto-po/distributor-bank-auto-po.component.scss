@@ -1,0 +1,35 @@
+@import '../../../features/master/product/master-product.component.scss';
+@import '../../../features/reports/distributor-growth-hub/distributor-growth-hub.component.scss';
+
+.bank-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.bank-card {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  h3 { margin: 0 0 1rem 0; font-size: 1.125rem; color: #1e293b; }
+}
+
+.od-bar {
+  background: #e2e8f0; height: 1rem; border-radius: 999px; margin-bottom: 0.5rem; overflow: hidden;
+}
+.od-fill {
+  background: #f59e0b; height: 100%; border-radius: 999px;
+}
+.od-stats { display: flex; justify-content: space-between; font-size: 0.875rem; color: #64748b; font-weight: 500; }
+
+.savings-val { font-size: 2.5rem; font-weight: 700; margin: 0.5rem 0; }
+
+.ai-badge {
+  background: linear-gradient(135deg, #a855f7, #7e22ce);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}

@@ -1,0 +1,128 @@
+<div class="adj-container">
+  @if (currentView() === 'list') {
+    <div class="header">
+      <h2>Stock Adjustments</h2>
+      <button class="btn btn-primary" (click)="openInitiate()">New Adjustment</button>
+    </div>
+    @if (loading()) { <div class="loading">Loading...</div> }
+    @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Adj No</th>
+            <th>Date</th>
+            <th>Remarks</th>
+            <th>Items Count</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (a of adjustments(); track a.adjNo) {
+            <tr>
+              <td>{{ a.adjNo }}</td>
+              <td>{{ a.adjDate }}</td>
+              <td>{{ a.remarks }}</td>
+              <td>{{ a.itemsCount || a.items?.length || 0 }}</td>
+              <td><span class="status-badge" [ngClass]="a.status?.toLowerCase()">{{ a.status }}</span></td>
+              <td>
+                @if (a.status === 'Pending') {
+                  <button class="btn btn-sm btn-confirm" (click)="updateStatus(a.adjNo, 'Approved')">Approve</button>
+                  <button class="btn btn-sm btn-cancel" (click)="updateStatus(a.adjNo, 'Rejected')">Reject</button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  }
+
+  @if (currentView() === 'entry') {
+    <div class="header">
+      <h2>New Stock Adjustment</h2>
+      <button class="btn btn-secondary" (click)="currentView.set('list')">Back</button>
+    </div>
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Adjustment No</label>
+        <input type="text" [value]="adjNo()" readonly />
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" [(ngModel)]="adjDate" />
+      </div>
+      <div class="form-group">
+        <label>Remarks</label>
+        <input type="text" [(ngModel)]="remarks" />
+      </div>
+    </div>
+    
+    <div class="entry-row form-grid">
+      <div class="form-group">
+        <label>Product</label>
+        <select [(ngModel)]="selectedProduct">
+          <option value="">-- Select --</option>
+          @for (p of masterProducts(); track p.ProductCode) {
+            <option [value]="p.ProductCode || p.product_code">{{ p.ProductName || p.product_name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select [(ngModel)]="adjType">
+          <option value="Addition">Addition (+)</option>
+          <option value="Deduction">Deduction (-)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Qty</label>
+        <input type="number" [(ngModel)]="adjQty" min="1" />
+      </div>
+      <div class="form-group">
+        <label>Reason</label>
+        <select [(ngModel)]="reason">
+          @for (r of reasons; track r) {
+            <option [value]="r">{{ r }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary" (click)="addItem()">Add</button>
+      </div>
+    </div>
+    
+    <table class="data-table mt-4">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Product Name</th>
+          <th>UOM</th>
+          <th>Type</th>
+          <th>Qty</th>
+          <th>Reason</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of entryItems(); track item.lineNo; let i = $index) {
+          <tr>
+            <td>{{ item.prodCode }}</td>
+            <td>{{ item.prodName }}</td>
+            <td>{{ item.uom }}</td>
+            <td><span [class]="item.type === 'Addition' ? 'text-green' : 'text-red'">{{ item.type }}</span></td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.reason }}</td>
+            <td><button class="btn btn-sm btn-cancel" (click)="removeItem(i)">Remove</button></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    
+    <div class="actions mt-4">
+      <button class="btn btn-primary" [disabled]="submitting()" (click)="submitAdjustment()">Submit</button>
+    </div>
+  }
+</div>

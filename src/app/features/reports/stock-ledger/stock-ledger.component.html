@@ -1,0 +1,61 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Stock Ledger</h2>
+      <p class="page-sub">Daily inventory movement report</p>
+    </div>
+    <div class="header-actions">
+      <input type="date" [(ngModel)]="selectedDate" (change)="loadLedger()" class="date-input">
+      <button class="btn-primary" (click)="generateLedger()" [disabled]="generating()">
+        @if (generating()) {
+          <span class="spinner-small"></span> Generating...
+        } @else {
+          Generate Ledger
+        }
+      </button>
+      <button class="btn-icon-circle" (click)="loadLedger()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading ledger...</span>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Product Code</th>
+            <th>Product Name</th>
+            <th class="text-right">Opening Stock</th>
+            <th class="text-right">Purchase Qty</th>
+            <th class="text-right">Sales Qty</th>
+            <th class="text-right">Closing Stock</th>
+            <th>UOM</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of ledgerData(); track row.ProductCode || row.product_code) {
+            <tr>
+              <td>{{ row.LedgerDate || row.ledger_date }}</td>
+              <td><code class="code-badge">{{ row.ProductCode || row.product_code }}</code></td>
+              <td class="prod-name">{{ row.ProductName || row.product_name }}</td>
+              <td class="text-right">{{ row.OpeningStock || row.opening_stock || 0 }}</td>
+              <td class="text-right text-green">{{ row.PurchaseQty || row.purchase_qty || 0 }}</td>
+              <td class="text-right text-red">{{ row.SalesQty || row.sales_qty || 0 }}</td>
+              <td class="text-right font-bold">{{ row.ClosingStock || row.closing_stock || 0 }}</td>
+              <td>{{ row.UOM || row.uom }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="empty-state">No stock ledger data found for this date.</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

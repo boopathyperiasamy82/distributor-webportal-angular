@@ -1,0 +1,60 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Sales Strategy (Customer 360)</h2>
+      <p class="page-sub">Comprehensive customer insights</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <input type="text" [(ngModel)]="customerSearch" placeholder="Search customer 360..." class="search-input">
+      </div>
+      <button class="btn-icon-circle" (click)="loadStrategy()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <span>Loading customer insights...</span>
+    </div>
+  } @else if (strategyData()) {
+    <div class="c360-grid">
+      @for (c of strategyData().customers || []; track c.customerCode) {
+        <div class="c360-card">
+          <div class="c-header">
+            <h3>{{ c.customerName }}</h3>
+            <span class="c-code">{{ c.customerCode }}</span>
+          </div>
+          <div class="c-stats">
+            <div>
+              <span class="label">Total Orders</span>
+              <span class="value">{{ c.totalOrders }}</span>
+            </div>
+            <div>
+              <span class="label">Total Value</span>
+              <span class="value">₹{{ c.totalValue | number:'1.0-0' }}</span>
+            </div>
+            <div>
+              <span class="label">Last Visit</span>
+              <span class="value">{{ c.lastVisit }}</span>
+            </div>
+          </div>
+          <div class="c-credit">
+            <span class="label">Credit Utilization</span>
+            <div class="credit-bar">
+              <div class="credit-fill" [style.width.%]="(c.creditUsed / c.creditLimit) * 100"
+                   [class.high]="(c.creditUsed / c.creditLimit) > 0.8"></div>
+            </div>
+          </div>
+          <div class="c-recommendation">
+            <span class="ai-badge">AI Next Visit: {{ c.nextVisitRec }}</span>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">No customer data available</div>
+      }
+    </div>
+  }
+</div>

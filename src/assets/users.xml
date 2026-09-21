@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<users>
+    <user>
+        <CmpCode>CMP001</CmpCode>
+        <DistrCode>ADMIN-001</DistrCode>
+        <username>admin</username>
+        <password>admin123</password>
+        <role>ROLE_ADMIN</role>
+        <userType>COMPANY</userType>
+        <name>System Administrator</name>
+        <status>ACTIVE</status>
+        <access>Y</access>
+        <editSellingRate>Y</editSellingRate>
+        <menuAccess>MASTER,MASTER_PRODUCT,MASTER_SALESMAN,MASTER_ROUTE,MASTER_CUSTOMER,MASTER_SALES_HIERARCHY,MASTER_GEO_HIERARCHY,MASTER_DISTRIBUTOR_GEO_MAPPING,TRANSACTION,TXN_ORDER_BOOKING,TXN_SALES_RETURN,TXN_COLLECTION,INVENTORY,INV_PURCHASE,INV_ORDER_TO_SALES,INV_STOCK_ADJUSTMENT,REPORT_DISTRIBUTOR,REPORT_CUSTOMER,REPORT_SALESMAN,RPT_DISTRIBUTOR_BANK_AUTO_PO,RPT_CUSTOMER_CREDIT_HEALTH,RPT_SALESMAN_NEXT_TIER_BEAT,RPT_DAILY_STOCK,RPT_STOCK_LEDGER,RPT_INVENTORY_SUMMARY,RPT_EXECUTIVE_ANALYTICS,SLS_STRATEGY_CUSTOMER_360,SLS_INCENTIVE_GAMIFICATION,SLS_DISTRIBUTOR_GROWTH_HUB,PLUG,PLUG_EXPORT,PLUG_IMPORT,CONFIGURATION,CONFIG_USER_PRIVILEGES</menuAccess>
+    </user>
+    <user>
+        <CmpCode>CMP001</CmpCode>
+        <DistrCode>DIST-10001</DistrCode>
+        <username>boopathy</username>
+        <password>boopathy123</password>
+        <role>ROLE_DISTRIBUTOR</role>
+        <userType>DISTRIBUTOR</userType>
+        <name>Boopathy Periyaswamy</name>
+        <status>ACTIVE</status>
+        <access>Y</access>
+        <editSellingRate>Y</editSellingRate>
+        <menuAccess>MASTER_PRODUCT,MASTER,MASTER_SALESMAN,MASTER_ROUTE,MASTER_CUSTOMER,MASTER_SALES_HIERARCHY,MASTER_GEO_HIERARCHY,MASTER_DISTRIBUTOR_GEO_MAPPING,TXN_ORDER_BOOKING,TRANSACTION,TXN_SALES_RETURN,TXN_COLLECTION,INV_PURCHASE,INVENTORY,INV_ORDER_TO_SALES,INV_STOCK_ADJUSTMENT,RPT_DAILY_STOCK,REPORT_DISTRIBUTOR,REPORT_CUSTOMER,REPORT_SALESMAN,RPT_DISTRIBUTOR_BANK_AUTO_PO,RPT_CUSTOMER_CREDIT_HEALTH,RPT_RETAILER_MARGIN_INTEL,RPT_SALESMAN_NEXT_TIER_BEAT,RPT_STOCK_LEDGER,RPT_INVENTORY_SUMMARY,RPT_EXECUTIVE_ANALYTICS,SLS_STRATEGY_CUSTOMER_360,SLS_INCENTIVE_GAMIFICATION,SLS_DISTRIBUTOR_GROWTH_HUB,PLUG_EXPORT,PLUG,PLUG_IMPORT,CONFIG_USER_PRIVILEGES,CONFIGURATION</menuAccess>
+    <enableInitiateTransaction>Y</enableInitiateTransaction></user>
+    <user>
+        <CmpCode>CMP001</CmpCode>
+        <DistrCode>DIST-99999</DistrCode>
+        <username>alex.morgan</username>
+        <password>Password@123</password>
+        <role>DISTRIBUTOR</role>
+        <userType>DISTRIBUTOR</userType>
+        <name>Alex Morgan &amp; Co.</name>
+        <email>alex.morgan@example.com</email>
+        <phone>9876543210</phone>
+        <status>ACTIVE</status>
+        <access>Y</access>
+        <menuAccess>TRANSACTION,TXN_ORDER_BOOKING,TXN_SALES_RETURN,INVENTORY,INV_ORDER_TO_SALES,PLUG,PLUG_EXPORT,PLUG_IMPORT</menuAccess>
+    <SalesHierarchyCode>SH-AREA-01</SalesHierarchyCode><GeoCode>GEO-ANN</GeoCode><editSellingRate>Y</editSellingRate></user>
+    <user>
+        <CmpCode>CMP001</CmpCode>
+        <DistrCode>DIST-33245</DistrCode>
+        <username>sds</username>
+        <password>Welcome@01</password>
+        <role>DISTRIBUTOR</role>
+        <userType>DISTRIBUTOR</userType>
+        <name>Raj R</name>
+        <email>sds@gmail.com</email>
+        <phone>8825456330</phone>
+        <status>ACTIVE</status>
+        <access>Y</access>
+        <menuAccess>TRANSACTION,TXN_ORDER_BOOKING,TXN_SALES_RETURN,INVENTORY,INV_ORDER_TO_SALES,PLUG,PLUG_EXPORT,PLUG_IMPORT</menuAccess>
+    <SalesHierarchyCode>SH-AREA-MUM1</SalesHierarchyCode><GeoCode>GEO-AND</GeoCode></user>
+</users>

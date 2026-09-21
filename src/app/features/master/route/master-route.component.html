@@ -1,0 +1,58 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Route Master</h2>
+      <p class="page-sub">Manage geographic routes</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search route..." class="search-input">
+      </div>
+      <span class="count-badge">{{ filteredRoutes().length }} records</span>
+      <button class="btn-icon-circle" (click)="loadRoutes()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading routes...</span>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Route Code</th>
+            <th>Route Name</th>
+            <th>Zone</th>
+            <th>City</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of filteredRoutes(); track r.RouteCode || r.route_code; let i = $index) {
+            <tr>
+              <td class="text-muted">{{ i + 1 }}</td>
+              <td><code class="code-badge">{{ r.RouteCode || r.route_code }}</code></td>
+              <td class="prod-name">{{ r.RouteName || r.route_name }}</td>
+              <td>{{ r.Zone || r.zone || '—' }}</td>
+              <td>{{ r.City || r.city || '—' }}</td>
+              <td>
+                <span class="status-badge" [class.active]="(r.Status || r.status) === 'ACTIVE'" [class.inactive]="(r.Status || r.status) !== 'ACTIVE'">
+                  {{ r.Status || r.status || 'INACTIVE' }}
+                </span>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty-state">No routes found.</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

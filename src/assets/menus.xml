@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menus>
+
+  <!-- ===================== MASTER ===================== -->
+  <menu>
+    <menuCode>MASTER</menuCode>
+    <menuDescription>Master</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>layers</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_PRODUCT</menuCode>
+    <menuDescription>Product</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>package</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_SALESMAN</menuCode>
+    <menuDescription>Salesman</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>user-check</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_ROUTE</menuCode>
+    <menuDescription>Route</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>map-pin</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_CUSTOMER</menuCode>
+    <menuDescription>Customer</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>users</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_SALES_HIERARCHY</menuCode>
+    <menuDescription>Sales Hierarchy</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>network</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_GEO_HIERARCHY</menuCode>
+    <menuDescription>Geo Hierarchy</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>globe</icon>
+  </menu>
+  <menu>
+    <menuCode>MASTER_DISTRIBUTOR_GEO_MAPPING</menuCode>
+    <menuDescription>Distributor Sales and Geo Mapping</menuDescription>
+    <parentCode>MASTER</parentCode>
+    <access>Y</access>
+    <icon>map-pin</icon>
+  </menu>
+
+  <!-- ===================== TRANSACTION ===================== -->
+  <menu>
+    <menuCode>TRANSACTION</menuCode>
+    <menuDescription>Transaction</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>arrow-left-right</icon>
+  </menu>
+  <menu>
+    <menuCode>TXN_ORDER_BOOKING</menuCode>
+    <menuDescription>Order Booking</menuDescription>
+    <parentCode>TRANSACTION</parentCode>
+    <access>Y</access>
+    <icon>clipboard-list</icon>
+  </menu>
+  <menu>
+    <menuCode>TXN_SALES_RETURN</menuCode>
+    <menuDescription>Sales Return</menuDescription>
+    <parentCode>TRANSACTION</parentCode>
+    <access>Y</access>
+    <icon>rotate-ccw</icon>
+  </menu>
+  <menu>
+    <menuCode>TXN_COLLECTION</menuCode>
+    <menuDescription>Collection</menuDescription>
+    <parentCode>TRANSACTION</parentCode>
+    <access>Y</access>
+    <icon>banknote</icon>
+  </menu>
+
+  <!-- ===================== INVENTORY ===================== -->
+  <menu>
+    <menuCode>INVENTORY</menuCode>
+    <menuDescription>Inventory</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>archive</icon>
+  </menu>
+  <menu>
+    <menuCode>INV_PURCHASE</menuCode>
+    <menuDescription>Purchase</menuDescription>
+    <parentCode>INVENTORY</parentCode>
+    <access>Y</access>
+    <icon>shopping-cart</icon>
+  </menu>
+  <menu>
+    <menuCode>INV_ORDER_TO_SALES</menuCode>
+    <menuDescription>Order to Sales</menuDescription>
+    <parentCode>INVENTORY</parentCode>
+    <access>Y</access>
+    <icon>truck</icon>
+  </menu>
+  <menu>
+    <menuCode>INV_STOCK_ADJUSTMENT</menuCode>
+    <menuDescription>Stock Adjustment</menuDescription>
+    <parentCode>INVENTORY</parentCode>
+    <access>Y</access>
+    <icon>sliders</icon>
+  </menu>
+
+  <!-- ===================== REPORT ===================== -->
+  <!-- ===================== DISTRIBUTOR REPORTS ===================== -->
+  <menu>
+    <menuCode>REPORT_DISTRIBUTOR</menuCode>
+    <menuDescription>Distributor Reports &amp; Analytics</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>building</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_DAILY_STOCK</menuCode>
+    <menuDescription>Daily Stock Report</menuDescription>
+    <parentCode>REPORT_DISTRIBUTOR</parentCode>
+    <access>Y</access>
+    <icon>file-bar-chart</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_STOCK_LEDGER</menuCode>
+    <menuDescription>Stock Ledger Report</menuDescription>
+    <parentCode>REPORT_DISTRIBUTOR</parentCode>
+    <access>Y</access>
+    <icon>book-open</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_INVENTORY_SUMMARY</menuCode>
+    <menuDescription>Inventory Summary Report</menuDescription>
+    <parentCode>REPORT_DISTRIBUTOR</parentCode>
+    <access>Y</access>
+    <icon>pie-chart</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_EXECUTIVE_ANALYTICS</menuCode>
+    <menuDescription>Executive Analytics Dashboard</menuDescription>
+    <parentCode>REPORT_DISTRIBUTOR</parentCode>
+    <access>Y</access>
+    <icon>trending-up</icon>
+  </menu>
+  <menu>
+    <menuCode>SLS_DISTRIBUTOR_GROWTH_HUB</menuCode>
+    <menuDescription>Distributor Business Growth &amp; ROI Hub</menuDescription>
+    <parentCode>REPORT_DISTRIBUTOR</parentCode>
+    <access>Y</access>
+    <icon>zap</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_DISTRIBUTOR_BANK_AUTO_PO</menuCode>
+    <menuDescription>Bank OD Interest &amp; AI Auto-PO Optimizer</menuDescription>
+    <parentCode>REPORT_DISTRIBUTOR</parentCode>
+    <access>Y</access>
+    <icon>shield-check</icon>
+  </menu>
+
+  <!-- ===================== CUSTOMER (RETAILER) REPORTS ===================== -->
+  <menu>
+    <menuCode>REPORT_CUSTOMER</menuCode>
+    <menuDescription>Customer (Retailer) Reports</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>users</icon>
+  </menu>
+  <menu>
+    <menuCode>SLS_STRATEGY_CUSTOMER_360</menuCode>
+    <menuDescription>Sales Strategy &amp; Customer 360° Report</menuDescription>
+    <parentCode>REPORT_CUSTOMER</parentCode>
+    <access>Y</access>
+    <icon>target</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_CUSTOMER_CREDIT_HEALTH</menuCode>
+    <menuDescription>Retailer Credit Health &amp; BNPL Limit Engine</menuDescription>
+    <parentCode>REPORT_CUSTOMER</parentCode>
+    <access>Y</access>
+    <icon>credit-card</icon>
+  </menu>
+
+  <!-- ===================== SALESMAN REPORTS ===================== -->
+  <menu>
+    <menuCode>REPORT_SALESMAN</menuCode>
+    <menuDescription>Salesman Reports &amp; Gamification</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>award</icon>
+  </menu>
+  <menu>
+    <menuCode>SLS_INCENTIVE_GAMIFICATION</menuCode>
+    <menuDescription>Salesman MTD Incentives &amp; 3D Gamification</menuDescription>
+    <parentCode>REPORT_SALESMAN</parentCode>
+    <access>Y</access>
+    <icon>trophy</icon>
+  </menu>
+  <menu>
+    <menuCode>RPT_SALESMAN_NEXT_TIER_BEAT</menuCode>
+    <menuDescription>Salesman Live Target Bonus &amp; Beat Route GPS</menuDescription>
+    <parentCode>REPORT_SALESMAN</parentCode>
+    <access>Y</access>
+    <icon>map-pin</icon>
+  </menu>
+
+  <!-- ===================== PLUG ===================== -->
+  <menu>
+    <menuCode>PLUG</menuCode>
+    <menuDescription>Plug</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>plug</icon>
+  </menu>
+  <menu>
+    <menuCode>PLUG_EXPORT</menuCode>
+    <menuDescription>Export</menuDescription>
+    <parentCode>PLUG</parentCode>
+    <access>Y</access>
+    <icon>download</icon>
+  </menu>
+  <menu>
+    <menuCode>PLUG_IMPORT</menuCode>
+    <menuDescription>Import</menuDescription>
+    <parentCode>PLUG</parentCode>
+    <access>Y</access>
+    <icon>upload</icon>
+  </menu>
+
+  <!-- ===================== CONFIGURATION ===================== -->
+  <menu>
+    <menuCode>CONFIGURATION</menuCode>
+    <menuDescription>Configuration</menuDescription>
+    <parentCode></parentCode>
+    <access>Y</access>
+    <icon>settings</icon>
+  </menu>
+  <menu>
+    <menuCode>CONFIG_USER_PRIVILEGES</menuCode>
+    <menuDescription>User Privileges</menuDescription>
+    <parentCode>CONFIGURATION</parentCode>
+    <access>Y</access>
+    <icon>shield-alert</icon>
+  </menu>
+
+</menus>

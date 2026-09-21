@@ -1,0 +1,48 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Export Data</h2>
+      <p class="page-sub">Export system records to file</p>
+    </div>
+  </div>
+
+  <div class="export-container">
+    <div class="section-block">
+      <h3>1. Select Entity</h3>
+      <div class="entity-grid">
+        @for (e of entities; track e.value) {
+          <div class="entity-card" [class.selected]="selectedEntity() === e.value" (click)="selectedEntity.set(e.value)">
+            {{ e.label }}
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="section-block">
+      <h3>2. Select Format</h3>
+      <div class="format-flex">
+        @for (f of formats; track f) {
+          <div class="format-pill" [class.selected]="selectedFormat() === f" (click)="selectedFormat.set(f)">
+            .{{ f | uppercase }}
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="section-block actions">
+      <button class="btn-primary btn-lg" (click)="startExport()" [disabled]="exporting()">
+        @if (exporting()) { <span class="spinner-small"></span> Exporting... }
+        @else { Export Data }
+      </button>
+    </div>
+
+    @if (exportResult()) {
+      <div class="result-box" [class.success]="downloadUrl()" [class.error]="!downloadUrl()">
+        <p>{{ exportResult() }}</p>
+        @if (downloadUrl()) {
+          <a [href]="downloadUrl()" target="_blank" class="download-link">Download File</a>
+        }
+      </div>
+    }
+  </div>
+</div>

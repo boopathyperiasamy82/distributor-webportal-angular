@@ -1,0 +1,15 @@
+.type-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: #f1f5f9;
+  color: #475569;
+
+  &[data-type="region"] { background-color: #e0e7ff; color: #4338ca; }
+  &[data-type="state"] { background-color: #fce7f3; color: #be185d; }
+  &[data-type="city"] { background-color: #fef3c7; color: #b45309; }
+  &[data-type="zone"] { background-color: #ccfbf1; color: #0f766e; }
+}

@@ -1,0 +1,206 @@
+<div class="purchase-container">
+  @if (currentView() === 'list') {
+    <div class="header">
+      <h2>Purchase Invoices</h2>
+      <div class="actions">
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search..." class="search-input" />
+        <button class="btn btn-primary" (click)="openInitiateView()">Initiate Purchase</button>
+      </div>
+    </div>
+    <div class="tabs">
+      @for (tab of statusTabs; track tab) {
+        <button [class.active]="currentStatus() === tab" (click)="setStatus(tab)">{{ tab }}</button>
+      }
+    </div>
+    
+    @if (loading()) {
+      <div class="loading-spinner">Loading...</div>
+    } @else {
+      @if (filteredPurchases().length === 0) {
+        <div class="empty-state">No purchases found.</div>
+      } @else {
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Ref No</th>
+              <th>Date</th>
+              <th>Products</th>
+              <th>Net Amount (₹)</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of filteredPurchases(); track p.purchaseRefNo) {
+              <tr>
+                <td><a href="javascript:void(0)" (click)="openInvoiceEditor(p)">{{ p.purchaseRefNo || p.purchaserefno || p.purchase_ref_no }}</a></td>
+                <td>{{ p.purchaseDate || p.purchasedate || p.purchase_date }}</td>
+                <td><span class="badge">{{ p.productCount || p.purchasedProductCount || p.purchasedproductcount || p.purchased_product_count || 1 }}</span></td>
+                <td>{{ (p.totalNet || p.totalNetAmt || p.total_net_amt || p.totalnetamt || 0) | number:'1.2-2' }}</td>
+                <td><span class="status-badge" [ngClass]="(p.status || 'Pending').toLowerCase()">{{ p.status || 'Pending' }}</span></td>
+                <td>
+                  <button class="btn btn-sm btn-edit" (click)="openInvoiceEditor(p)">Edit</button>
+                  @if (p.status === 'Pending') {
+                    <button class="btn btn-sm btn-confirm" (click)="updateStatus(p.purchaseRefNo, 'Confirmed')">Confirm</button>
+                    <button class="btn btn-sm btn-cancel" (click)="updateStatus(p.purchaseRefNo, 'Cancelled')">Cancel</button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    }
+  }
+
+  @if (currentView() === 'entry') {
+    <div class="header">
+      <h2>New Purchase Invoice</h2>
+      <button class="btn btn-secondary" (click)="currentView.set('list')">Back</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Ref No</label>
+        <input type="text" [value]="purRefNo()" readonly />
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" [(ngModel)]="purDate" />
+      </div>
+      <div class="form-group">
+        <label>Supplier</label>
+        <select [(ngModel)]="selectedSupplierCode">
+          <option value="">-- Select Supplier --</option>
+          @for (s of masterSuppliers(); track s.SupplierCode) {
+            <option [value]="s.SupplierCode || s.supplier_code">{{ s.SupplierName || s.supplier_name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    
+    <div class="entry-row form-grid">
+      <div class="form-group">
+        <label>Product</label>
+        <select [(ngModel)]="selectedProductCode" (change)="onProductChange()">
+          <option value="">-- Select Product --</option>
+          @for (p of masterProducts(); track p.ProductCode) {
+            <option [value]="p.ProductCode || p.product_code">{{ p.ProductName || p.product_name }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>UOM</label>
+        <select [(ngModel)]="selectedUomCode">
+          @for (u of availableUoms(); track u.UOMCode) {
+            <option [value]="u.UOMCode">{{ u.UOMDescription || u.UOMCode }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Qty</label>
+        <input type="number" [(ngModel)]="inputQty" min="1" />
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary" (click)="addEntryLine()">Add</button>
+      </div>
+    </div>
+    
+    <table class="data-table mt-4">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>UOM</th>
+          <th>Qty</th>
+          <th>Rate</th>
+          <th>Gross</th>
+          <th>Tax</th>
+          <th>Net</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of entryLineItems(); track item.lineNo; let i = $index) {
+          <tr>
+            <td>{{ item.prodCode }}</td>
+            <td>{{ item.productName }}</td>
+            <td>{{ item.inputUom }}</td>
+            <td>{{ item.inputQty }}</td>
+            <td>{{ item.purchaseRate | number:'1.2-2' }}</td>
+            <td>{{ item.grossValue | number:'1.2-2' }}</td>
+            <td>{{ item.taxValue | number:'1.2-2' }}</td>
+            <td>{{ item.netValue | number:'1.2-2' }}</td>
+            <td><button class="btn btn-sm btn-cancel" (click)="removeLineItem(i)">Remove</button></td>
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-right"><strong>Total</strong></td>
+          <td><strong>{{ totalGross | number:'1.2-2' }}</strong></td>
+          <td><strong>{{ totalTax | number:'1.2-2' }}</strong></td>
+          <td><strong>{{ totalNet | number:'1.2-2' }}</strong></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+    <div class="actions mt-4">
+      <button class="btn btn-primary" [disabled]="submitting()" (click)="submitInitiatedPurchase()">
+        {{ submitting() ? 'Submitting...' : 'Submit Purchase' }}
+      </button>
+    </div>
+  }
+
+  @if (currentView() === 'edit') {
+    <div class="header">
+      <h2>Invoice: {{ activeEditingInvoice()?.purchaseRefNo }}</h2>
+      <span class="status-badge" [ngClass]="activeEditingInvoice()?.status?.toLowerCase()">{{ activeEditingInvoice()?.status }}</span>
+      <button class="btn btn-secondary" (click)="currentView.set('list')">Back</button>
+    </div>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Name</th>
+          <th>Salable Qty</th>
+          <th>Unsalable Qty</th>
+          <th>Offer Qty</th>
+          <th>Gross</th>
+          <th>Tax</th>
+          <th>Net</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of activeEditingItems(); track item.lineNo; let i = $index) {
+          <tr>
+            <td>{{ item.prodCode }}</td>
+            <td>{{ item.productName }}</td>
+            <td><input type="number" class="small-input" [ngModel]="item.salableQty" (ngModelChange)="updateItemQty(i, 'salableQty', $event)" /></td>
+            <td><input type="number" class="small-input" [ngModel]="item.unsalableQty" (ngModelChange)="updateItemQty(i, 'unsalableQty', $event)" /></td>
+            <td><input type="number" class="small-input" [ngModel]="item.offerQty" (ngModelChange)="updateItemQty(i, 'offerQty', $event)" /></td>
+            <td>{{ item.grossValue | number:'1.2-2' }}</td>
+            <td>{{ item.taxValue | number:'1.2-2' }}</td>
+            <td>{{ item.netValue | number:'1.2-2' }}</td>
+          </tr>
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="text-right"><strong>Total</strong></td>
+          <td><strong>{{ editTotalGross | number:'1.2-2' }}</strong></td>
+          <td><strong>{{ editTotalTax | number:'1.2-2' }}</strong></td>
+          <td><strong>{{ editTotalNet | number:'1.2-2' }}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+    
+    <div class="actions mt-4">
+      <button class="btn btn-primary" [disabled]="submitting()" (click)="saveInvoice()">
+        {{ submitting() ? 'Saving...' : 'Save Invoice' }}
+      </button>
+    </div>
+  }
+</div>

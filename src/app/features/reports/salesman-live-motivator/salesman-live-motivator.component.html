@@ -1,0 +1,50 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Live Motivator</h2>
+      <p class="page-sub">Real-time field performance tracking</p>
+    </div>
+    <div class="header-actions">
+      <select [(ngModel)]="period" (change)="loadData()" class="period-select">
+        <option value="TODAY">Today</option>
+        <option value="WEEK">This Week</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="motivator-grid">
+    <div class="card-list">
+      @for (s of liveData(); track s.name) {
+        <div class="salesman-card">
+          <div class="s-header">
+            <h3>{{ s.name }}</h3>
+            @if (s.tier === 3) { <span class="tier-badge gold">Tier 3 Bonus!</span> }
+            @else if (s.tier === 2) { <span class="tier-badge silver">Tier 2 Active</span> }
+            @else if (s.tier === 1) { <span class="tier-badge bronze">Tier 1 Active</span> }
+          </div>
+          <div class="s-stats">
+            <span>Achieved: ₹{{ s.achieved | number:'1.0-0' }}</span>
+            <span>Target: ₹{{ s.target | number:'1.0-0' }}</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bg">
+              <div class="progress-fill" [style.width.%]="getPct(s.achieved, s.target)"
+                   [class.pulse]="getPct(s.achieved, s.target) >= 100"></div>
+            </div>
+            <div class="pct-val">{{ getPct(s.achieved, s.target) | number:'1.0-0' }}%</div>
+          </div>
+        </div>
+      }
+    </div>
+    
+    <div class="gps-card">
+      <h3>Beat Route Activity</h3>
+      <div class="map-placeholder">
+        <div class="pulse-dot" style="top: 30%; left: 40%;"></div>
+        <div class="pulse-dot" style="top: 60%; left: 70%;"></div>
+        <div class="pulse-dot" style="top: 45%; left: 20%;"></div>
+        <p>Live tracking mock map</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Distributor Growth Hub</h2>
+      <p class="page-sub">Track targets, ROI, and growth metrics</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon-circle" (click)="loadGrowth()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <span>Loading growth data...</span>
+    </div>
+  } @else if (growthData()) {
+    <div class="growth-cards">
+      <div class="card roi-card">
+        <h3>ROI Calculator (YTD)</h3>
+        <div class="roi-val">{{ growthData().roiPercent || 0 }}%</div>
+        <p>Return on Investment</p>
+      </div>
+      
+      <div class="card target-card">
+        <h3>Revenue Target Achievement</h3>
+        <div class="target-stats">
+          <span>Achieved: ₹{{ growthData().achievedRevenue || 0 | number:'1.0-0' }}</span>
+          <span>Target: ₹{{ growthData().targetRevenue || 0 | number:'1.0-0' }}</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" [style.width.%]="(growthData().achievedRevenue / growthData().targetRevenue) * 100"></div>
+        </div>
+        <div class="target-pct">{{ ((growthData().achievedRevenue / growthData().targetRevenue) * 100) | number:'1.0-1' }}%</div>
+      </div>
+      
+      <div class="card metrics-card">
+        <h3>Purchase Efficiency</h3>
+        <ul>
+          <li><span>Working Capital Cycles:</span> <strong>{{ growthData().wcCycles || 0 }}</strong></li>
+          <li><span>Avg Payables Days:</span> <strong>{{ growthData().avgPayableDays || 0 }}</strong></li>
+          <li><span>Avg Receivables Days:</span> <strong>{{ growthData().avgReceivableDays || 0 }}</strong></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="table-card mt-4">
+      <h3 class="tbl-title">Revenue Trend</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th class="text-right">Revenue (₹)</th>
+            <th class="text-right">Growth %</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of growthData().monthlyTrend || []; track m.month) {
+            <tr>
+              <td>{{ m.month }}</td>
+              <td class="text-right font-bold">{{ m.revenue | number:'1.0-0' }}</td>
+              <td class="text-right" [class.text-green]="m.growth > 0" [class.text-red]="m.growth < 0">
+                {{ m.growth > 0 ? '+' : '' }}{{ m.growth }}%
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="3" class="empty-state">No trend data</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

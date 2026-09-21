@@ -1,0 +1,130 @@
+<div class="dashboard-home">
+  <!-- HERO BANNER -->
+  <div class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-text">
+        <p class="greeting-label">{{ greeting }},</p>
+        <h2 class="hero-title">{{ user()?.name || user()?.username }}
+          <span class="wave">👋</span>
+        </h2>
+        <p class="hero-sub">Here's your distributor performance overview</p>
+      </div>
+      <div class="date-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>{{ todayDate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERIOD FILTER -->
+  <div class="period-filter">
+    @for (f of [['MTD','Month to Date'], ['LAST_15_DAYS','Last 15 Days'], ['TODAY','Today']] ; track f[0]) {
+      <button class="period-btn" [class.active]="periodFilter() === f[0]" (click)="setPeriodFilter(f[0])">{{ f[1] }}</button>
+    }
+  </div>
+
+  <!-- KPI CARDS -->
+  @if (loading()) {
+    <div class="kpi-grid">
+      @for (i of [1,2,3,4]; track i) {
+        <div class="kpi-card skeleton">
+          <div class="skeleton-block" style="width:48px;height:48px;border-radius:50%"></div>
+          <div style="flex:1">
+            <div class="skeleton-block" style="width:60%;height:14px;margin-bottom:8px"></div>
+            <div class="skeleton-block" style="width:40%;height:24px"></div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#6366f1,#818cf8)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-label">Total Distributors</div>
+          <div class="kpi-value">{{ kpiData()?.distributorCount || kpiData()?.distr_count || '—' }}</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-label">Total Customers</div>
+          <div class="kpi-value">{{ kpiData()?.customerCount || kpiData()?.customer_count || '—' }}</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-label">Purchase Value</div>
+          <div class="kpi-value">{{ formatCurrency(kpiData()?.purchaseValue || kpiData()?.total_purchase || 0) }}</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="kpi-body">
+          <div class="kpi-label">Sales Value</div>
+          <div class="kpi-value">{{ formatCurrency(kpiData()?.salesValue || kpiData()?.total_sales || 0) }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- QUICK ACTIONS -->
+  <div class="section-title">Quick Actions</div>
+  <div class="quick-actions-grid">
+    <div class="quick-card" (click)="navigate('/dashboard/transaction/order-booking')">
+      <div class="quick-icon" style="background:rgba(14,165,233,0.12);color:#0ea5e9">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <div class="quick-body">
+        <div class="quick-title">Order Booking</div>
+        <div class="quick-desc">Create & manage customer orders</div>
+      </div>
+      <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+
+    <div class="quick-card" (click)="navigate('/dashboard/transaction/sales-return')">
+      <div class="quick-icon" style="background:rgba(239,68,68,0.10);color:#ef4444">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.32"/></svg>
+      </div>
+      <div class="quick-body">
+        <div class="quick-title">Sales Return</div>
+        <div class="quick-desc">Process product return requests</div>
+      </div>
+      <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+
+    <div class="quick-card" (click)="navigate('/dashboard/inventory/order-to-sale')">
+      <div class="quick-icon" style="background:rgba(16,185,129,0.10);color:#10b981">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <div class="quick-body">
+        <div class="quick-title">Order to Sale</div>
+        <div class="quick-desc">Dispatch confirmed orders</div>
+      </div>
+      <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+
+    <div class="quick-card" (click)="navigate('/dashboard/plug/export')">
+      <div class="quick-icon" style="background:rgba(139,92,246,0.10);color:#8b5cf6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </div>
+      <div class="quick-body">
+        <div class="quick-title">Export Data</div>
+        <div class="quick-desc">Download reports & data</div>
+      </div>
+      <svg class="quick-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+  </div>
+</div>

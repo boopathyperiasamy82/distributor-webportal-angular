@@ -1,0 +1,71 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Bank & Auto PO</h2>
+      <p class="page-sub">AI-driven purchase optimization</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon-circle" (click)="loadData()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-overlay">
+      <div class="spinner"></div>
+      <span>Analyzing purchase history...</span>
+    </div>
+  } @else if (bankData()) {
+    <div class="bank-cards">
+      <div class="bank-card limit-card">
+        <h3>OD Account Status</h3>
+        <div class="od-bar">
+          <div class="od-fill" [style.width.%]="(bankData().odUtilized / bankData().odLimit) * 100"></div>
+        </div>
+        <div class="od-stats">
+          <span>Utilized: ₹{{ bankData().odUtilized | number:'1.0-0' }}</span>
+          <span>Limit: ₹{{ bankData().odLimit | number:'1.0-0' }}</span>
+        </div>
+      </div>
+      
+      <div class="bank-card savings-card">
+        <h3>Estimated Interest Savings</h3>
+        <div class="savings-val text-green">₹{{ bankData().interestSaved | number:'1.0-0' }}</div>
+        <p>Through Just-in-Time AI ordering</p>
+      </div>
+    </div>
+    
+    <div class="table-card mt-4">
+      <h3 class="tbl-title">AI Auto-PO Recommendations</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th class="text-right">Recommended Qty</th>
+            <th>Optimal Timing</th>
+            <th class="text-right">Expected Savings (₹)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rec of bankData().recommendations; track rec.prod) {
+            <tr>
+              <td class="prod-name">{{ rec.prod }}</td>
+              <td class="text-right font-bold">{{ rec.qty }}</td>
+              <td>{{ rec.timing }}</td>
+              <td class="text-right text-green">{{ rec.savings | number:'1.0-0' }}</td>
+              <td>
+                @if (rec.aiRecommended) {
+                  <span class="ai-badge">✨ AI Recommended</span>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5" class="empty-state">No recommendations at this time</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

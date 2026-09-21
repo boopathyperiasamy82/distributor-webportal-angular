@@ -1,0 +1,12 @@
+@import '../../../features/master/product/master-product.component.scss';
+@import '../../../features/reports/retailer-credit-bnpl/retailer-credit-bnpl.component.scss';
+
+.rank-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%; background: #f1f5f9; color: #64748b; font-weight: 700; font-size: 0.875rem;
+  &[data-rank="1"] { background: #fef08a; color: #854d0e; font-size: 1.25rem; }
+  &[data-rank="2"] { background: #e2e8f0; color: #475569; font-size: 1.25rem; }
+  &[data-rank="3"] { background: #fed7aa; color: #9a3412; font-size: 1.25rem; }
+}
+
+tr.top-3 { background-color: #f8fafc; }

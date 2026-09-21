@@ -1,0 +1,82 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Configuration & Privileges</h2>
+      <p class="page-sub">Manage system settings and access</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab" [class.active]="activeTab() === 'menu'" (click)="activeTab.set('menu')">User Menu Privileges</div>
+    <div class="tab" [class.active]="activeTab() === 'app'" (click)="activeTab.set('app')">Application Privileges</div>
+  </div>
+
+  <div class="tab-content">
+    @if (activeTab() === 'menu') {
+      <div class="config-card">
+        <div class="user-select-row">
+          <label>Select User:</label>
+          <select [(ngModel)]="selectedUsername" (change)="onUserSelect()" class="form-select">
+            <option value="">-- Choose User --</option>
+            @for (u of users(); track u.username) { <option [value]="u.username">{{ u.name }} ({{ u.username }})</option> }
+          </select>
+        </div>
+
+        @if (selectedUsername()) {
+          <div class="menu-grid">
+            @for (group of menuGroups(); track group.menuCode) {
+              <div class="menu-group">
+                <label class="cb-label group-cb">
+                  <input type="checkbox" [checked]="hasAccess(group.menuCode)" (change)="toggleMenu(group.menuCode)">
+                  <span>{{ group.menuName }}</span>
+                </label>
+                <div class="children">
+                  @for (child of group.children; track child.menuCode) {
+                    <label class="cb-label child-cb">
+                      <input type="checkbox" [checked]="hasAccess(child.menuCode)" (change)="toggleMenu(child.menuCode)">
+                      <span>{{ child.menuName }}</span>
+                    </label>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          
+          <div class="actions">
+            @if (successMessage()) { <span class="text-green">{{ successMessage() }}</span> }
+            <button class="btn-primary" (click)="savePrivileges()" [disabled]="saving()">
+              @if (saving()) { <span class="spinner-small"></span> Saving... }
+              @else { Save Privileges }
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    @if (activeTab() === 'app') {
+      <div class="app-config-grid">
+        <div class="config-card">
+          <div class="card-header">
+            <h3>Edit Selling Rate</h3>
+            <label class="switch">
+              <input type="checkbox" [(ngModel)]="editSellingRate">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <p class="desc">Allow this user to modify selling rates during order booking.</p>
+        </div>
+
+        <div class="config-card">
+          <div class="card-header">
+            <h3>Generate Stock Ledger Engine</h3>
+          </div>
+          <p class="desc">Manually trigger the background engine to compute missing stock ledger entries for the past days.</p>
+          <button class="btn-secondary mt-2" (click)="generateStockLedger()" [disabled]="generatingLedger()">
+            @if (generatingLedger()) { <span class="spinner-small dark"></span> Running Engine... }
+            @else { Trigger Engine }
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

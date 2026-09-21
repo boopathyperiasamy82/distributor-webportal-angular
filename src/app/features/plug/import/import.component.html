@@ -1,0 +1,73 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Import Data</h2>
+      <p class="page-sub">Bulk import records into the system</p>
+    </div>
+  </div>
+
+  <div class="wizard-container">
+    <div class="steps-indicator">
+      <div class="step" [class.active]="step() >= 1">1. Entity</div>
+      <div class="step-line" [class.active]="step() >= 2"></div>
+      <div class="step" [class.active]="step() >= 2">2. Upload</div>
+      <div class="step-line" [class.active]="step() >= 3"></div>
+      <div class="step" [class.active]="step() >= 3">3. Preview</div>
+      <div class="step-line" [class.active]="step() >= 4"></div>
+      <div class="step" [class.active]="step() >= 4">4. Result</div>
+    </div>
+
+    @if (step() === 1) {
+      <div class="step-content">
+        <h3>Select Entity to Import</h3>
+        <select [(ngModel)]="selectedEntity" class="entity-select">
+          @for (e of entities; track e.value) { <option [value]="e.value">{{ e.label }}</option> }
+        </select>
+        <button class="btn-primary mt-4" (click)="step.set(2)">Next: Upload File</button>
+      </div>
+    }
+
+    @if (step() === 2) {
+      <div class="step-content">
+        <h3>Upload File (.csv, .json)</h3>
+        <div class="drop-zone" [class.dragging]="isDragging()" (click)="fileInput.click()">
+          <div class="icon">📁</div>
+          <p>Drag & drop file here or click to browse</p>
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept=".csv,.json" style="display:none">
+        </div>
+        <button class="btn-secondary mt-4" (click)="step.set(1)">Back</button>
+      </div>
+    }
+
+    @if (step() === 3) {
+      <div class="step-content">
+        <h3>Preview Data ({{ file()?.name }})</h3>
+        <div class="table-card mb-4">
+          <table class="data-table">
+            <thead><tr><th>Column 1</th><th>Status</th></tr></thead>
+            <tbody>
+              @for (r of previewData(); track r.col1) { <tr><td>{{ r.col1 }}</td><td><span class="status-badge active">{{ r.col2 }}</span></td></tr> }
+            </tbody>
+          </table>
+        </div>
+        <div class="actions">
+          <button class="btn-secondary" (click)="step.set(2)">Back</button>
+          <button class="btn-primary" (click)="startImport()" [disabled]="importing()">
+            @if (importing()) { <span class="spinner-small"></span> Importing... }
+            @else { Confirm Import }
+          </button>
+        </div>
+      </div>
+    }
+
+    @if (step() === 4) {
+      <div class="step-content text-center">
+        <h3>Import Complete</h3>
+        <div class="result-box mt-4" [class.success]="importResult().includes('success') || importResult().includes('Imported')" [class.error]="importResult().includes('Failed')">
+          <p>{{ importResult() }}</p>
+        </div>
+        <button class="btn-primary mt-4" (click)="reset()">Import Another File</button>
+      </div>
+    }
+  </div>
+</div>

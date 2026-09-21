@@ -1,0 +1,75 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Inventory Summary</h2>
+      <p class="page-sub">Current stock levels and valuation</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon-circle" (click)="loadSummary()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-title">Total SKUs</div>
+      <div class="kpi-value">{{ totalSkus() }}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Total Stock Value</div>
+      <div class="kpi-value text-blue">₹{{ totalValue() | number:'1.2-2' }}</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-title">Out of Stock</div>
+      <div class="kpi-value text-red">{{ outOfStock() }}</div>
+    </div>
+  </div>
+
+  <div class="table-card mt-4">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading summary...</span>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Category</th>
+            <th class="text-right">Stock Qty</th>
+            <th class="text-right">Stock Value (₹)</th>
+            <th class="text-right">Min Level</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of summaryData(); track row.ProductCode || row.product_code) {
+            <tr>
+              <td>
+                <div class="prod-name">{{ row.ProductName || row.product_name }}</div>
+                <code class="code-badge mt-1">{{ row.ProductCode || row.product_code }}</code>
+              </td>
+              <td>{{ row.Category || row.category || '—' }}</td>
+              <td class="text-right font-bold">{{ row.StockQty || row.stock_qty || 0 }}</td>
+              <td class="text-right">{{ (row.StockValue || row.stock_value || 0) | number:'1.2-2' }}</td>
+              <td class="text-right">{{ row.MinLevel || row.min_level || 0 }}</td>
+              <td>
+                @if ((row.StockQty || row.stock_qty || 0) <= 0) {
+                  <span class="status-badge inactive">Out of Stock</span>
+                } @else if ((row.StockQty || row.stock_qty || 0) <= (row.MinLevel || row.min_level || 0)) {
+                  <span class="status-badge warning">Low Stock</span>
+                } @else {
+                  <span class="status-badge active">In Stock</span>
+                }
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty-state">No inventory data available.</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

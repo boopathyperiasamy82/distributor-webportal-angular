@@ -1,0 +1,34 @@
+@import '../../../features/master/product/master-product.component.scss';
+@import '../../../features/reports/stock-ledger/stock-ledger.component.scss';
+
+.export-container { max-width: 800px; }
+
+.section-block {
+  background: white; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  h3 { margin: 0 0 1rem 0; font-size: 1.125rem; color: #1e293b; }
+}
+
+.entity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+.entity-card {
+  padding: 1rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; text-align: center; cursor: pointer; transition: all 0.2s; color: #475569; font-weight: 500;
+  &:hover { border-color: #93c5fd; background: #eff6ff; }
+  &.selected { border-color: #3b82f6; background: #eff6ff; color: #1d4ed8; }
+}
+
+.format-flex { display: flex; gap: 1rem; }
+.format-pill {
+  padding: 0.5rem 1.5rem; border: 2px solid #e2e8f0; border-radius: 9999px; cursor: pointer; transition: all 0.2s; font-weight: 600; color: #64748b;
+  &:hover { border-color: #cbd5e1; background: #f8fafc; }
+  &.selected { border-color: #10b981; background: #dcfce7; color: #047857; }
+}
+
+.actions { display: flex; justify-content: flex-end; background: transparent; box-shadow: none; padding: 0; }
+.btn-lg { padding: 0.75rem 2rem; font-size: 1rem; }
+
+.result-box {
+  padding: 1rem 1.5rem; border-radius: 0.5rem; margin-top: 1.5rem;
+  &.success { background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; }
+  &.error { background: #fee2e2; border: 1px solid #fecaca; color: #991b1b; }
+  p { margin: 0 0 0.5rem 0; font-weight: 500; }
+}
+.download-link { display: inline-block; text-decoration: none; background: white; padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem; font-weight: 600; color: #166534; border: 1px solid #bbf7d0; transition: background 0.2s; &:hover { background: #f0fdf4; } }

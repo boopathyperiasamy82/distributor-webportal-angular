@@ -1,0 +1,58 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">Product Master</h2>
+      <p class="page-sub">All products in your catalog</p>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search product..." class="search-input">
+      </div>
+      <span class="count-badge">{{ filteredProducts().length }} records</span>
+      <button class="btn-icon-circle" (click)="loadProducts()" title="Refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    @if (loading()) {
+      <div class="loading-overlay">
+        <div class="spinner"></div>
+        <span>Loading products...</span>
+      </div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Product Code</th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Base UOM</th>
+            <th class="text-right">MRP (₹)</th>
+            <th class="text-right">Purchase Rate</th>
+            <th class="text-right">Selling Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (prod of filteredProducts(); track prod.ProductCode || prod.product_code; let i = $index) {
+            <tr>
+              <td class="text-muted">{{ i + 1 }}</td>
+              <td><code class="code-badge">{{ prod.ProductCode || prod.product_code }}</code></td>
+              <td class="prod-name">{{ prod.ProductName || prod.product_name }}</td>
+              <td>{{ prod.Category || prod.category || '—' }}</td>
+              <td>{{ prod.BaseUOM || prod.base_uom }}</td>
+              <td class="text-right">{{ (prod.MRP || prod.mrp || 0) | number:'1.2-2' }}</td>
+              <td class="text-right">{{ (prod.PurchaseRate || prod.purchase_rate || 0) | number:'1.2-2' }}</td>
+              <td class="text-right font-bold">{{ (prod.SellingRate || prod.selling_rate || 0) | number:'1.2-2' }}</td>
+            </tr>
+          } @empty {
+            <tr><td colspan="8" class="empty-state">No products found.</td></tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

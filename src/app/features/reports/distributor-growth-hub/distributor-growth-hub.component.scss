@@ -1,0 +1,42 @@
+@import '../../../features/master/product/master-product.component.scss';
+@import '../../../features/reports/stock-ledger/stock-ledger.component.scss';
+
+.growth-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  h3 { margin: 0 0 1rem 0; font-size: 1.125rem; color: #1e293b; }
+}
+
+.roi-card {
+  text-align: center;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  h3 { color: rgba(255,255,255,0.9); }
+  .roi-val { font-size: 3rem; font-weight: 700; margin: 1rem 0; }
+}
+
+.target-card {
+  .target-stats { display: flex; justify-content: space-between; font-size: 0.875rem; color: #64748b; margin-bottom: 0.5rem; }
+  .progress-bar-bg { background: #e2e8f0; height: 1rem; border-radius: 999px; overflow: hidden; }
+  .progress-bar-fill { background: #3b82f6; height: 100%; border-radius: 999px; transition: width 0.5s ease-out; }
+  .target-pct { text-align: center; margin-top: 0.5rem; font-weight: 600; color: #0f172a; }
+}
+
+.metrics-card {
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;
+    &:last-child { border-bottom: none; }
+    color: #475569;
+    strong { color: #0f172a; }
+  }
+}
+
+.tbl-title { margin: 1rem; font-size: 1.125rem; color: #1e293b; }
