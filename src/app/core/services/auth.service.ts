@@ -69,8 +69,11 @@ export class AuthService {
 
   getMenuAccess(): Set<string> {
     const user = this.getUser();
-    if (!user || !user.menuAccess) return new Set<string>();
-    return new Set(user.menuAccess.split(',').map(m => m.trim()));
+    if (!user || !user.menuAccess || user.menuAccess.trim() === '*' || user.role === 'ROLE_ADMIN' || user.role === 'Admin') {
+      return new Set<string>(['*']);
+    }
+    const codes = user.menuAccess.split(',').map(m => m.trim()).filter(Boolean);
+    return new Set<string>(codes.length > 0 ? codes : ['*']);
   }
 
   isAdmin(): boolean {

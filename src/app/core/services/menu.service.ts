@@ -121,11 +121,12 @@ export class MenuService {
   }
 
   buildMenuTree(items: MenuItem[], allowedCodes: Set<string>): MenuItem[] {
+    const isWildcard = !allowedCodes || allowedCodes.size === 0 || allowedCodes.has('*');
     const itemMap = new Map<string, MenuItem>();
     const roots: MenuItem[] = [];
     
     items.forEach(item => {
-      if (allowedCodes.has('*') || allowedCodes.has(item.menuCode) || !item.parentCode) {
+      if (isWildcard || allowedCodes.has(item.menuCode) || !item.parentCode) {
          itemMap.set(item.menuCode, { ...item, children: [] });
       }
     });
@@ -141,7 +142,7 @@ export class MenuService {
       }
     });
 
-    if (!allowedCodes.has('*')) {
+    if (!isWildcard) {
        return roots.filter(root => root.children.length > 0);
     }
     
